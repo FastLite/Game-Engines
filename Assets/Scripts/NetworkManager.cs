@@ -213,6 +213,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnJoinedRoom()
     {
+        FindObjectOfType<CarSelector>().ShowNextPlate();
         joiningRoomPanel.SetActive(false);
         roomLobbyPanel.SetActive(true);
 
