@@ -15,4 +15,4 @@ MonoBehaviour:
   carId: 0
   carName: Racing car
   speed: {x: 0, y: 0, z: 50}
-  handeling: {x: 0, y: 0, z: 10}
+  handeling: {x: 0, y: 10, z: 0}

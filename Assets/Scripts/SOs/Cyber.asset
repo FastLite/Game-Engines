@@ -15,4 +15,4 @@ MonoBehaviour:
   carId: 1
   carName: Cyber Car
   speed: {x: 0, y: 0, z: 45}
-  handeling: {x: 0, y: 0, z: 20}
+  handeling: {x: 0, y: 20, z: 0}

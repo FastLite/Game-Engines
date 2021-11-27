@@ -22,7 +22,7 @@ public class CountDown : MonoBehaviourPun
         if (timer >= 0.0f)
         {
             timer -= Time.deltaTime;
-            photonView.RPC("UpdateTimerText", RpcTarget.All);
+            photonView.RPC("UpdateTimerText", RpcTarget.All, timer);
         }
         else
         {
