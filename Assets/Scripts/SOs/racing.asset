@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carId: 0
   carName: Racing car
-  speed: {x: 0, y: 0, z: 50}
+  speed: {x: 0, y: 0, z: 25}
   handeling: {x: 0, y: 10, z: 0}
