@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: -4599248912228881401}
   - component: {fileID: 2976533752841928969}
   - component: {fileID: -1680732588882003521}
+  - component: {fileID: -47974614472716557}
   m_Layer: 0
   m_Name: RC_Player_CyberCar
   m_TagString: Untagged
@@ -227,6 +228,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf4a121ae99931b4baf7b468ada8c593, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-47974614472716557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523779623789243299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda8f43f8c28704418eaa31d691781f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6211801577416648885
