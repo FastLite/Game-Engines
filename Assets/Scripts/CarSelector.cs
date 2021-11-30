@@ -30,7 +30,7 @@ public class CarSelector : MonoBehaviour
     }
     private void UpdateText(int carId)
     {
-        properties.text = "Speed[" + carInfo[carId].speed + "]  |  Handling[" + carInfo[carId].handeling+"]";
+        properties.text = "Speed [" + carInfo[carId].speed.z + "]  |  Handling [" + carInfo[carId].handeling.y +"]";
         carName.text = carInfo[carId].name;
     }
 }

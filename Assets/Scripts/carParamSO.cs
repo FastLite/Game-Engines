@@ -9,4 +9,5 @@ public class carParamSO : ScriptableObject
     public string carName;
     public Vector3 speed;
     public Vector3 handeling;
+
 }
