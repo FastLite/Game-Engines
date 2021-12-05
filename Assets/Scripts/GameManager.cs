@@ -7,7 +7,7 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPun
 {
     public List<PlayerStandingUIItem> standingsUIList;
     public enum raiseEventCodes
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         lastAssignedRank++;
         int indx = playerRanks.FindIndex(x => x.viewID == photonViewID);
         playerRanks[indx].rank = lastAssignedRank;
-        object data = new object[] {playerRanks[indx].viewID, playerRanks[indx].rank};
+        object data = new object[] {playerRanks[indx].viewID, playerRanks[indx].rank, Time.time-3};
         PhotonNetwork.RaiseEvent((byte) raiseEventCodes.raceFinishCode, data,
             new RaiseEventOptions() {Receivers = ReceiverGroup.All}, SendOptions.SendReliable);
     }
@@ -74,12 +74,14 @@ public class GameManager : MonoBehaviour
             object[] incomingData = (object[]) photonEventData.CustomData;
             int viewId = (int)incomingData[0];
             int rank = (int)incomingData[1];
+            float time = (float)incomingData[2];
 
             int indx = playerRanks.FindIndex(x => x.viewID == viewId);
             playerRanks[indx].rank = rank;
-            Debug.Log(playerRanks[indx].pv.Owner.NickName + " FINIXSHED AT POSITION: " + rank);
-            
-            
+            Debug.Log(playerRanks[indx].pv.Owner.NickName + " FINISHED AT POSITION: " + rank);
+            standingsUIList[indx].UpdateInfo(playerRanks[indx].pv.Owner.NickName, rank, true);
+
+
         }
        
     }

@@ -34,7 +34,7 @@ public class CountDown : MonoBehaviourPun
     void StartRace()
     {
         GetComponent<CarMovementController>().EnableMovement();
-        GameManager.instance.CountDownGameObject.transform.parent.gameObject.SetActive(false);
+        GameManager.instance.CountDownGameObject.SetActive(false);
 
     }
 
