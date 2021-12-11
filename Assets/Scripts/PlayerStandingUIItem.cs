@@ -13,7 +13,7 @@ public class PlayerStandingUIItem : MonoBehaviour
     {
         playerNameText.text = plName;
         playerRankText.text = plRank.ToString();
-        playerTime.text = (Time.timeSinceLevelLoad - 3).ToString();
+        playerTime.text = (Time.timeSinceLevelLoad - 3).ToString("#.00");
 
         if (isPlayerYou)
         {

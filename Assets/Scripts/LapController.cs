@@ -8,7 +8,7 @@ using Photon.Realtime;
 using UnityEngine;
 
 public class LapController : MonoBehaviourPun
-{
+{    
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine)
@@ -16,26 +16,31 @@ public class LapController : MonoBehaviourPun
         if (other.CompareTag("Lap"))
         {
             Debug.Log("Lap trigger crossed");
+            EndRace(false);
+
         }
         else if(other.CompareTag("Finish"))
         {
             Debug.Log("Car reached finish");
-            EndRace();
+            GameManager.instance.ShowScore();
+            EndRace(true);
         }
         
     }
 
-    void EndRace()
+    void EndRace(bool realEnd)
     {
         if (!photonView.IsMine)
             return;
-        gameObject.GetComponentInChildren<Camera>().gameObject.transform.parent = null;
-        GetComponent<CarMovementController>().enabled = false;
         string currentPlayerNN = photonView.Owner.NickName;
         object[] data = new object[]{currentPlayerNN, photonView.ViewID};
         PhotonNetwork.RaiseEvent((byte) GameManager.raiseEventCodes.raceFinishUpdateRank,data
             ,new RaiseEventOptions(){Receivers = ReceiverGroup.MasterClient}
             ,new SendOptions(){Reliability = false} );
+        if (!realEnd)
+            return;
+        gameObject.GetComponentInChildren<Camera>().gameObject.transform.parent = null;
+        GetComponent<CarMovementController>().enabled = false;
     }
 
     private void OnEnable()

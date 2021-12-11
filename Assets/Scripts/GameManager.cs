@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviourPun
     public List<GameObject> playerPrefabs;
     public Text countDownText;
     public GameObject CountDownGameObject;
+    public GameObject raceEndScreen;
+    public GameObject verticalLayout;
 
     public GameObject myCarInstance;
     public static GameManager instance = null;
@@ -54,36 +56,46 @@ public class GameManager : MonoBehaviourPun
         if (!PhotonNetwork.IsMasterClient)
             return;
         lastAssignedRank++;
+        if (lastAssignedRank >=PhotonNetwork.CurrentRoom.PlayerCount)
+        {
+            lastAssignedRank = 1;
+        }
         int indx = playerRanks.FindIndex(x => x.viewID == photonViewID);
         playerRanks[indx].rank = lastAssignedRank;
-        object data = new object[] {playerRanks[indx].viewID, playerRanks[indx].rank, Time.time-3};
+        object data = new object[] {playerRanks[indx].viewID, playerRanks[indx].rank};
         PhotonNetwork.RaiseEvent((byte) raiseEventCodes.raceFinishCode, data,
             new RaiseEventOptions() {Receivers = ReceiverGroup.All}, SendOptions.SendReliable);
     }
-
+    //TODO: Don't update ranks on regular checkpoints
+    //TODO: Make END UI PRETIER and use vertical layout
+    //Test case Update UI localy because as soon as car reaches next point it will update on master.
     public void OnEventCallBack(EventData photonEventData)
     {
         if (photonEventData.Code ==(byte)raiseEventCodes.raceFinishUpdateRank )
         {
             object[] incomingData = (object[]) photonEventData.CustomData;
             CheckAndUpdateUI((int)incomingData[1]);
-
         }
         else if (photonEventData.Code == (byte)raiseEventCodes.raceFinishCode)
         {
             object[] incomingData = (object[]) photonEventData.CustomData;
             int viewId = (int)incomingData[0];
             int rank = (int)incomingData[1];
-            float time = (float)incomingData[2];
-
             int indx = playerRanks.FindIndex(x => x.viewID == viewId);
             playerRanks[indx].rank = rank;
             Debug.Log(playerRanks[indx].pv.Owner.NickName + " FINISHED AT POSITION: " + rank);
             standingsUIList[indx].UpdateInfo(playerRanks[indx].pv.Owner.NickName, rank, true);
-
-
         }
-       
+    }
+
+    public void ShowScore()
+    {
+        raceEndScreen.SetActive(true);
+        foreach (var par in standingsUIList)
+        {
+            par.transform.SetParent(verticalLayout.transform) ;
+        }
+        
     }
     
 }
