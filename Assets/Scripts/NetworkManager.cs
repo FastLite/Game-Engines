@@ -105,6 +105,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (string.IsNullOrEmpty(playerName))
         {
             Debug.Log("<color=red> Player name not entered. Can't cannect to server without it.</color>");
+            errorText.text = " Connect  failed: error code" + "Player name not entered. Can't cannect to server without it";
+            errorPlate.SetActive(true);
+           
+            waitingToConnectPanel.SetActive(false);
+            loginPanel.SetActive(true);
         }
         else
         {

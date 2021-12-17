@@ -8,11 +8,14 @@ using Photon.Realtime;
 using UnityEngine;
 
 public class LapController : MonoBehaviourPun
-{    
+{
+    private int lastAssignedRank;
     private void OnTriggerEnter(Collider other)
     {
+        other.gameObject.GetComponent<count>().lastrank++;
+        lastAssignedRank = other.GetComponent<count>().lastrank;
         if (!photonView.IsMine)
-        return;
+            return;
         if (other.CompareTag("Lap"))
         {
             Debug.Log("Lap trigger crossed");
@@ -21,9 +24,15 @@ public class LapController : MonoBehaviourPun
         }
         else if(other.CompareTag("Finish"))
         {
+            gameObject.GetComponentInChildren<Camera>().gameObject.transform.parent = null;
+            GetComponent<CarMovementController>().enabled = false;
+            if (lastAssignedRank==PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                GameManager.instance.ShowScore();
+                EndRace(true);
+            }
             Debug.Log("Car reached finish");
-            GameManager.instance.ShowScore();
-            EndRace(true);
+            
         }
         
     }
@@ -33,14 +42,12 @@ public class LapController : MonoBehaviourPun
         if (!photonView.IsMine)
             return;
         string currentPlayerNN = photonView.Owner.NickName;
-        object[] data = new object[]{currentPlayerNN, photonView.ViewID};
+        object[] data = {currentPlayerNN, photonView.ViewID, lastAssignedRank, photonView.IsMine};
         PhotonNetwork.RaiseEvent((byte) GameManager.raiseEventCodes.raceFinishUpdateRank,data
             ,new RaiseEventOptions(){Receivers = ReceiverGroup.MasterClient}
             ,new SendOptions(){Reliability = false} );
-        if (!realEnd)
-            return;
-        gameObject.GetComponentInChildren<Camera>().gameObject.transform.parent = null;
-        GetComponent<CarMovementController>().enabled = false;
+        
+        
     }
 
     private void OnEnable()

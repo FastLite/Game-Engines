@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviourPun
 
     public GameObject myCarInstance;
     public static GameManager instance = null;
+    private bool ismine;
 
     public List<GO_ID_Duo> playerRanks;
     private void Awake()
@@ -55,11 +56,6 @@ public class GameManager : MonoBehaviourPun
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        lastAssignedRank++;
-        if (lastAssignedRank >=PhotonNetwork.CurrentRoom.PlayerCount)
-        {
-            lastAssignedRank = 1;
-        }
         int indx = playerRanks.FindIndex(x => x.viewID == photonViewID);
         playerRanks[indx].rank = lastAssignedRank;
         object data = new object[] {playerRanks[indx].viewID, playerRanks[indx].rank};
@@ -74,7 +70,9 @@ public class GameManager : MonoBehaviourPun
         if (photonEventData.Code ==(byte)raiseEventCodes.raceFinishUpdateRank )
         {
             object[] incomingData = (object[]) photonEventData.CustomData;
+            lastAssignedRank = (int)incomingData[2];
             CheckAndUpdateUI((int)incomingData[1]);
+            ismine = (bool)incomingData[3];
         }
         else if (photonEventData.Code == (byte)raiseEventCodes.raceFinishCode)
         {
@@ -83,8 +81,7 @@ public class GameManager : MonoBehaviourPun
             int rank = (int)incomingData[1];
             int indx = playerRanks.FindIndex(x => x.viewID == viewId);
             playerRanks[indx].rank = rank;
-            Debug.Log(playerRanks[indx].pv.Owner.NickName + " FINISHED AT POSITION: " + rank);
-            standingsUIList[indx].UpdateInfo(playerRanks[indx].pv.Owner.NickName, rank, true);
+            standingsUIList[indx].UpdateInfo(playerRanks[indx].pv.Owner.NickName, rank,ismine);
         }
     }
 
@@ -93,7 +90,7 @@ public class GameManager : MonoBehaviourPun
         raceEndScreen.SetActive(true);
         foreach (var par in standingsUIList)
         {
-            par.transform.SetParent(verticalLayout.transform) ;
+            par.transform.SetParent(verticalLayout.transform);
         }
         
     }
